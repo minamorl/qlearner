@@ -1,6 +1,5 @@
 from .constant import Action
 
-
 class Environment:
     def __init__(self,
                  *,
