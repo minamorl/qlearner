@@ -20,11 +20,12 @@ def main():
     environment = Environment(
         rate_jpy_dollar=dataset, owned_capital=np.zeros((dataset.shape[0], )))
 
-    for i in range(dataset.shape[0] - 1):
+    for i in range(time, dataset.shape[0] - 1):
         action = agent.choose_action(time)
         reward = environment.apply_action(time, action)
         print(action)
         print(reward)
+        print(agent.q_value)
         agent.update_q_value(time, action, reward)
         time = time + 1
 main()

@@ -1,6 +1,7 @@
 from .constant import Action
 import numpy as np
 import math
+import random
 
 class Agent:
     def __init__(self,
@@ -16,8 +17,11 @@ class Agent:
 
     def choose_action(self, time):
         """" Choose an action from q-value. Returns action."""
-        return np.argmax(self.q_value[time])
-
+        argmax = np.argmax(self.q_value[time])
+        if argmax == 0:
+            return random.randrange(len(Action))
+        return argmax
+    
     def update_q_value(self, time, action, reward):
         """ Update q-value """
         self.q_value[time][action] = \
