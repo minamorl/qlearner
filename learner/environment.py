@@ -1,3 +1,4 @@
+import math
 from .constant import Action
 
 class Environment:
@@ -27,5 +28,5 @@ class Environment:
         if action == Action.FLAT:
             self.owned_capital[time + 1] = self.owned_capital[time]
 
-        reward = self.owned_capital[time + 1] - self.owned_capital[time]
+        reward = math.log(self.owned_capital[time + 1] / self.owned_capital[time])
         return reward
