@@ -1,4 +1,5 @@
 import math
+import numpy as np
 from .constant import Action
 
 class Environment:
@@ -16,6 +17,8 @@ class Environment:
 
     def apply_action(self, time, action):
         """ Returns rewards """
+        if self.rate_jpy_dollar[time] == np.nan or self.rate_jpy_dollar[time + 1] == np.nan:            
+            self.owned_capital[time + 1] = self.owned_capital[time]
 
         if action == 0:
             self.owned_capital[time + 1] =\
@@ -23,13 +26,9 @@ class Environment:
                     self.rate_jpy_dollar[time] * self.owned_capital[time]
         if action == 1:
             self.owned_capital[time + 1] =\
-                (1 - (self.rate_jpy_dollar[time + 1] / \
-                    self.rate_jpy_dollar[time])) * self.owned_capital[time]
+                (2 - (self.rate_jpy_dollar[time + 1] / self.rate_jpy_dollar[time])) * self.owned_capital[time]
         if action == 2:
             self.owned_capital[time + 1] = self.owned_capital[time]
         
-        print(self.owned_capital)
         reward = math.log(self.owned_capital[time + 1] / self.owned_capital[time])
-        print(action)
-        print(reward)
         return reward

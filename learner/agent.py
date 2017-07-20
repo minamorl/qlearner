@@ -26,6 +26,7 @@ class Agent:
         """ Update q-value """
         self.q_value[time][action] = \
             self.q_value[time][action] + \
-            self.step_size * (math.log(1 + reward * self.investment_ratio) +\
+            self.step_size * (
+            math.log(1 + reward * self.investment_ratio) +\
             self.discount_factor * max(self.q_value[time + 1][i] for i in range(len(Action))) -\
             self.q_value[time][action])

@@ -16,7 +16,7 @@ def main():
     dataset = web.DataReader("DEXJPUS", "fred", start,  end)['DEXJPUS']
     
     time = random.randrange(dataset.shape[0])
-    owned_capital = np.ones((dataset.shape[0], )) * 10000
+    owned_capital = np.ones((dataset.shape[0], )) * 100
     agent = Agent(step_size=1, discount_factor=0.9, investment_ratio=2.0, q_value=np.zeros((dataset.shape[0], 3)))
     environment = Environment(
         rate_jpy_dollar=dataset,
@@ -27,4 +27,5 @@ def main():
         reward = environment.apply_action(time, action)
         agent.update_q_value(time, action, reward)
         time = time + 1
+        print(agent.q_value)
 main()
