@@ -1,0 +1,2 @@
+class StopLearningIteration(Exception):
+    pass
