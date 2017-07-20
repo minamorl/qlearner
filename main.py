@@ -16,8 +16,8 @@ def main():
     dataset = web.DataReader("DEXJPUS", "fred", start,  end)['DEXJPUS']
     
     time = random.randrange(dataset.shape[0])
-    owned_capital = np.ones((dataset.shape[0], ))
-    agent = Agent(step_size=1.0, discount_factor=0.8, investment_ratio=1.0, q_value=np.zeros((dataset.shape[0], 3)))
+    owned_capital = np.ones((dataset.shape[0], )) * 100
+    agent = Agent(step_size=5, discount_factor=0.9, investment_ratio=2.0, q_value=np.zeros((dataset.shape[0], 3)))
     environment = Environment(
         rate_jpy_dollar=dataset,
         owned_capital=owned_capital)
