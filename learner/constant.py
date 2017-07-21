@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import IntEnum
 
-class Action(Enum):
+class Action(IntEnum):
     LONG = 0
     FLAT = 1
     SHORT = 2

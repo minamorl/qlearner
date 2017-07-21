@@ -21,14 +21,14 @@ class Environment:
             self.rate_jpy_dollar[time + 1] = self.rate_jpy_dollar[time]
             return 0
 
-        if action == 0:
+        if action == Action.LONG:
             self.owned_capital[time + 1] =\
                 self.rate_jpy_dollar[time + 1] / \
                     self.rate_jpy_dollar[time] * self.owned_capital[time]
-        if action == 1:
+        if action == Action.SHORT:
             self.owned_capital[time + 1] =\
                 (2 - (self.rate_jpy_dollar[time + 1] / self.rate_jpy_dollar[time])) * self.owned_capital[time]
-        if action == 2:
+        if action == Action.FLAT:
             self.owned_capital[time + 1] = self.owned_capital[time]
         reward = math.log(self.owned_capital[time + 1] / self.owned_capital[time])
         return reward
