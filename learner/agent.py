@@ -10,19 +10,22 @@ class Agent:
                  step_size,
                  investment_ratio,
                  discount_factor,
-                 q_value):
+                 q_value,
+                 eps):
         self.step_size = step_size
         self.investment_ratio = investment_ratio
         self.discount_factor = discount_factor
         self.q_value = q_value
+        self.eps = eps
 
     def choose_action(self, time):
         """" Choose an action from q-value. Returns action."""
-        argmax = np.argmax(self.q_value[time])
-        if argmax == 0.0:
-            return random.randrange(len(Action))
-        return argmax
-
+        rate = random.random()
+        if rate < 1.0 - self.eps:
+            argmax = np.argmax(self.q_value[time])
+            return argmax
+        return random.randrange(len(Action))
+        
     def update_q_value(self, time, action, reward):
         """ Update q-value """
         next_q_value = \
