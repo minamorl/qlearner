@@ -4,6 +4,7 @@ import math
 import random
 from learner.error import StopLearningIteration
 
+
 class Agent:
     def __init__(self,
                  *,
@@ -25,15 +26,15 @@ class Agent:
             argmax = np.argmax(self.q_value[time])
             return argmax
         return random.randrange(len(Action))
-        
+
     def update_q_value(self, time, action, reward):
         """ Update q-value """
         next_q_value = \
             self.q_value[time][action] + \
             self.step_size * (
-            math.log(1 + (reward - 1) * self.investment_ratio) +\
-            self.discount_factor * max(self.q_value[time + 1][i] for i in range(len(Action))) -\
-            self.q_value[time][action])
+                math.log(1 + (reward - 1) * self.investment_ratio) +
+                self.discount_factor * max(self.q_value[time + 1][i] for i in range(len(Action))) -
+                self.q_value[time][action])
         if not self.q_value[time][action]:
             self.q_value[time][action] = next_q_value
             return

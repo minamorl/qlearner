@@ -1,5 +1,6 @@
 from enum import IntEnum
 
+
 class Action(IntEnum):
     LONG = 0
     FLAT = 1
