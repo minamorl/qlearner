@@ -17,25 +17,36 @@ class Agent:
         self.investment_ratio = investment_ratio
         self.discount_factor = discount_factor
         self.q_value = q_value
+        self.q_value_keys = []
         self.eps = eps
 
-    def choose_action(self, time):
+    def choose_action(self, state):
         """" Choose an action from q-value. Returns action."""
         rate = random.random()
         if rate < 1.0 - self.eps:
-            argmax = np.argmax(self.q_value[time])
+            argmax = np.argmax(self.q_value[self._find_q_value_index(state)])
             return argmax
         return random.randrange(len(Action))
 
-    def update_q_value(self, time, action, reward):
+    def _find_q_value_index(self, state):
+        """ Find index of q-value. If given state is not in q_value_keys, append it and return new index. """
+        for key, i in enumerate(self.q_value_keys):
+            if state == key:
+                return i
+        self.q_value_keys.append(state)
+        return len(self.q_value_keys) - 1
+
+    def update_q_value(self, action, state, next_state, reward):
         """ Update q-value """
+        q_value_index = self._find_q_value_index(state)
+        next_q_value_index = self._find_q_value_index(next_state)
         next_q_value = \
-            self.q_value[time][action] + \
+            self.q_value[q_value_index][action] + \
             self.step_size * (
                 math.log(1 + (reward - 1) * self.investment_ratio) +
-                self.discount_factor * max(self.q_value[time + 1][i] for i in range(len(Action))) -
-                self.q_value[time][action])
-        if not self.q_value[time][action]:
-            self.q_value[time][action] = next_q_value
+                self.discount_factor * max(self.q_value[next_q_value_index][i] for i in range(len(Action))) -
+                self.q_value[q_value_index][action])
+        if self.q_value[q_value_index][action] != next_q_value:
+            self.q_value[q_value_index][action] = next_q_value
             return
         raise StopLearningIteration()

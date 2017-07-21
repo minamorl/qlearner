@@ -1,6 +1,7 @@
 import math
 import numpy as np
 from .constant import Action
+from .state import State
 
 
 class Environment:
@@ -18,7 +19,7 @@ class Environment:
 
     def observe_state(self, time):
         """ Returns environment state at time"""
-        return (self.rcp[time], self.rmsd[time])
+        return State(self.rcp[time], self.rmsd[time])
 
     def apply_action(self, time, action):
         """ Returns rewards """
