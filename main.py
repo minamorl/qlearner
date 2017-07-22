@@ -40,7 +40,7 @@ def main():
     start = datetime.datetime(2015, 1, 1)
     end = datetime.datetime(2015, 12, 31)
     dataset = web.DataReader("DEXJPUS", "fred", start,  end)['DEXJPUS']
-
+    dataset.dropnan()
     owned_capital = np.ones((dataset.shape[0], ))
     rcp, rmsd = calcrate_rcp_rmsd(dataset, 50)
     learning_times = 10
