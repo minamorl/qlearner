@@ -104,14 +104,14 @@ def main():
         )
 
         reward2 = 1
-        
+
         for j in range(0, dataset2.shape[0] - 2):
             state = grid_state(environment2.observe_state(time))
             action = agent.choose_action(state)
             reward2 *= environment2.apply_action(j, action)
             environment2.update_state(j)
         reward_test[i] = reward2
-        
+
     fig, ax = plt.subplots()
     ax.set_xlabel("number of iteration")
     ax.set_ylabel("Annualized cumulative return[%]")
@@ -119,7 +119,6 @@ def main():
     plt.plot(pd.expanding_mean(reward_test))
     plt.grid(True)
     plt.show()
-
 
 
 main()
