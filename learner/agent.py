@@ -17,7 +17,7 @@ class Agent:
         self.investment_ratio = investment_ratio
         self.discount_factor = discount_factor
         self.q_value = q_value
-        self.q_value_keys = []
+        self.map_state_to_q_value_index = dict()
         self.eps = eps
 
     def choose_action(self, state):
@@ -30,11 +30,11 @@ class Agent:
 
     def _find_q_value_index(self, state):
         """ Find index of q-value. If given state is not in q_value_keys, append it and return new index. """
-        for key, i in enumerate(self.q_value_keys):
-            if state == key:
-                return i
-        self.q_value_keys.append(state)
-        return len(self.q_value_keys) - 1
+        if state in self.map_state_to_q_value_index:
+            return self.map_state_to_q_value_index[state]
+        index = len(self.map_state_to_q_value_index)
+        self.map_state_to_q_value_index[state] = index
+        return index
 
     def update_q_value(self, action, state, next_state, reward):
         """ Update q-value """
