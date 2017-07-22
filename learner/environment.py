@@ -5,6 +5,7 @@ from .state import State
 
 
 class Environment:
+    """ Provides observable state. """
     def __init__(self,
                  *,
                  rate_jpy_dollar,
@@ -42,5 +43,6 @@ class Environment:
         return reward
 
     def update_state(self, time):
+        """ Update state value. """
         self.rcp[time + 1] = self.rcp[time]
         self.rmsd[time + 1] = self.rmsd[time]
