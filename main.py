@@ -15,7 +15,7 @@ from learner.state import State
 def calcrate_rcp_rmsd(dataset, relative_count):
     rcp_value = np.zeros_like(dataset)
     rmsd_value = np.zeros_like(dataset)
-    for t in range(dataset.shape[0]):
+    for t in range(relative_count, dataset.shape[0]):
         # Calcuration of RCP (relative closing place)
         mu = 1.0 / relative_count * \
             sum(dataset[t] for _ in range(t - relative_count + 1, t))
@@ -54,16 +54,18 @@ def main():
     rcp_max = rcp.max()
     rmsd_min = rmsd.min()
     rmsd_max = rmsd.max()
-    grid_size = 5
+    grid_size = 10
     grid_rcp = np.linspace(rcp_min, rcp_max, num=grid_size + 1)
     grid_rmsd = np.linspace(rmsd_min, rmsd_max, num=grid_size + 1)
+    print(grid_rcp)
+    print(grid_rmsd)
 
     def grid_state(state): return State(find_nerest(
         grid_rcp, state.rcp), find_nerest(grid_rmsd, state.rmsd))
 
-    learning_times = 10000
+    learning_times = 1000
 
-    agent = Agent(step_size=1, discount_factor=0.9, investment_ratio=0.5,
+    agent = Agent(step_size=1, discount_factor=0.9, investment_ratio=0.9,
                   q_value=np.zeros((grid_size * grid_size, 3)), eps=0.05)
     environment = Environment(
         rate_jpy_dollar=dataset,
@@ -73,10 +75,10 @@ def main():
     )
 
     for i in range(learning_times):
-        time = random.randrange(dataset.shape[0])
+        time = random.randrange(50, dataset.shape[0])
+        print("{} time iteration".format(i))
         for j in range(time, dataset.shape[0] - 1):
             state = grid_state(environment.observe_state(time))
-            print(state)
             action = agent.choose_action(state)
             reward = environment.apply_action(time, action)
             next_state = grid_state(environment.observe_state(time + 1))
@@ -86,8 +88,22 @@ def main():
                 break
             environment.update_state(time)
             time = time + 1
-        for x in agent.q_value:
-            print(x)
+
+    # testing
+    environment = Environment(
+        rate_jpy_dollar=dataset,
+        owned_capital=owned_capital,
+        rcp=rcp,
+        rmsd=rmsd,
+    )
+    reward = 1
+    for j in range(0, dataset.shape[0] - 2):
+        state = grid_state(environment.observe_state(time))
+        action = agent.choose_action(state)
+        reward *= environment.apply_action(j, action)
+        print("choosed action: {}".format(action))
+        environment.update_state(j)
+    print(reward)
 
 
 main()

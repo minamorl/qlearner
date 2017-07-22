@@ -30,7 +30,7 @@ class Agent:
 
     def _find_q_value_index(self, state):
         """ Find index of q-value. If given state is not in q_value_keys, append it and return new index. """
-        if state in self.map_state_to_q_value_index:
+        if state in self.map_state_to_q_value_index.keys():
             return self.map_state_to_q_value_index[state]
         index = len(self.map_state_to_q_value_index)
         self.map_state_to_q_value_index[state] = index
@@ -46,7 +46,4 @@ class Agent:
                 math.log(1 + (reward - 1) * self.investment_ratio) +
                 self.discount_factor * max(self.q_value[next_q_value_index][i] for i in range(len(Action))) -
                 self.q_value[q_value_index][action])
-        if self.q_value[q_value_index][action] != next_q_value:
-            self.q_value[q_value_index][action] = next_q_value
-            return
-        raise StopLearningIteration()
+        self.q_value[q_value_index][action] = next_q_value    

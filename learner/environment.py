@@ -6,6 +6,7 @@ from .state import State
 
 class Environment:
     """ Provides observable state. """
+
     def __init__(self,
                  *,
                  rate_jpy_dollar,
@@ -38,8 +39,7 @@ class Environment:
                       self.rate_jpy_dollar[time])) * self.owned_capital[time]
         if action == Action.FLAT:
             self.owned_capital[time + 1] = self.owned_capital[time]
-        reward = math.log(
-            self.owned_capital[time + 1] / self.owned_capital[time])
+        reward = self.owned_capital[time + 1] / self.owned_capital[time]
         return reward
 
     def update_state(self, time):
